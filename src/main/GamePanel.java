@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,21 +11,25 @@ public class GamePanel extends JPanel implements Runnable{
     //screen settings
     final int originalTileSize = 16; //16x16 tile size, standard size for many 2D games
     final int scale = 3; //common scale for retro-style game
-    public int tileSize = originalTileSize * scale; //makes it 48x48
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12; //creates a 4x3 ratio
-    final int screenWidth = tileSize * maxScreenCol; //768 pixels
-    final int screenHeight = tileSize*maxScreenRow; // 576 pixels
-    int FPS = 60;
+    public final int tileSize = originalTileSize * scale; //makes it 48x48
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 12; //creates a 4x3 ratio
+    public final int screenWidth = tileSize * maxScreenCol; //768 pixels
+    public final int screenHeight = tileSize*maxScreenRow; // 576 pixels
 
+    //WORLD SETTING
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize*maxWorldCol;
+    public final int worldHeight = tileSize*maxWorldRow;
+
+    TileManager tileMan = new TileManager(this);
     KeyHandler keyH = new KeyHandler(); //instantiates key handler
     Thread gameThread;
-    Player player = new Player(this, keyH);
+    public CollisionChecker cChecker = new CollisionChecker(this);
+    public Player player = new Player(this, keyH);
 
-    //set player's default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
+    int FPS = 60;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -71,6 +76,9 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
+
+        tileMan.draw(g2);//this is a layer, if drawn after player.draw, it will end up on top of the player and we won't see it
+
         player.draw(g2);
 
         g2.dispose();

@@ -13,17 +13,29 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
+    public final int screenX;
+    public final int screenY;
+
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+
+        collisionArea = new Rectangle();
+        collisionArea.x = 8;
+        collisionArea.y = 16;
+        collisionArea.width = 32;
+        collisionArea.height = 32;
+
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize*23; //not where we draw on the screen, but where player is on map
+        worldY = gp.tileSize*21;
         speed = 4;
         direction = "down";
     }
@@ -46,16 +58,26 @@ public class Player extends Entity{
         if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){//outer loop to make sprite walk only when a key is pressed, otherwise it moves constantly
             if(keyH.upPressed){
                 direction = "up";
-                y -= speed; //moves the number of pixels that is playerSpeed
             }else if(keyH.downPressed){
                 direction = "down";
-                y += speed;
             }else if(keyH.leftPressed){
                 direction = "left";
-                x -= speed;
             }else if(keyH.rightPressed){
                 direction = "right";
-                x += speed;
+            }
+
+            //CHECK TILE COLLISION
+            collisionOn = false;
+            gp.cChecker.checkTile(this); //"this" is the player, but it is an Entity subclass so it works
+
+            //IF COLLISION IS FALSE, PLAYER CAN MOVE
+            if(collisionOn == false){
+                switch (direction){
+                    case "up" : worldY -= speed; break;
+                    case "down" : worldY += speed; break;
+                    case "left" : worldX -= speed; break;
+                    case "right" : worldX += speed; break;
+                }
             }
 
             spriteCounter++;
@@ -109,6 +131,6 @@ public class Player extends Entity{
                 }
             }
         }
-        g2.drawImage(image, x,y,gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX,screenY,gp.tileSize, gp.tileSize, null);
     }
 }
