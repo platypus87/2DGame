@@ -18,6 +18,8 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        gamePanel.setupGame(); //this needs to happen before the thread
+
         gamePanel.startGameThread();
 
     }

@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -27,7 +28,12 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler(); //instantiates key handler
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    SuperObject obj[] = new SuperObject[10];
+    //This sets up space for 10 objects, but we can replace items later, too
+    //This means that we can display up to ten objects on the map at the same time
+    //10 was chosen to make sure too many items don't slow down the game
 
     int FPS = 60;
 
@@ -37,6 +43,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame(){
+        aSetter.setObject();
     }
 
     public void startGameThread(){
@@ -77,8 +87,16 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;
 
+        //Tile
         tileMan.draw(g2);//this is a layer, if drawn after player.draw, it will end up on top of the player and we won't see it
 
+        //OBJECT
+        for(int i = 0; i < obj.length; i++){
+            if (obj[i]!= null){ //need to check if null to avoid NullPointerError
+                obj[i].draw(g2, this);
+            }
+        }
+        //Player
         player.draw(g2);
 
         g2.dispose();
