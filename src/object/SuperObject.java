@@ -10,6 +10,10 @@ public class SuperObject {
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
+    //setting default object collision area to the whole tile, can be changed per object
+    public Rectangle collisionArea = new Rectangle(0,0,48,48);
+    public int defaultCollisionAreaX = 0;
+    public int defaultCollisionAreaY = 0;
 
     public void draw(Graphics2D g2, GamePanel gp){
         //should be similar to background tiles in tile manager

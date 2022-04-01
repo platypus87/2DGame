@@ -15,6 +15,7 @@ public class Entity {
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public int defaultCollisionAreaX, defaultCollisionAreaY;
     public Rectangle collisionArea; //creates invisible/abstract rectangle area for collision detection
     public boolean collisionOn = false;
 

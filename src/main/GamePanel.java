@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
-    SuperObject obj[] = new SuperObject[10];
+    public SuperObject obj[] = new SuperObject[10];
     //This sets up space for 10 objects, but we can replace items later, too
     //This means that we can display up to ten objects on the map at the same time
     //10 was chosen to make sure too many items don't slow down the game

@@ -26,6 +26,8 @@ public class Player extends Entity{
         collisionArea = new Rectangle();
         collisionArea.x = 8;
         collisionArea.y = 16;
+        defaultCollisionAreaX = collisionArea.x;
+        defaultCollisionAreaY = collisionArea.y;
         collisionArea.width = 32;
         collisionArea.height = 32;
 
@@ -70,6 +72,11 @@ public class Player extends Entity{
             collisionOn = false;
             gp.cChecker.checkTile(this); //"this" is the player, but it is an Entity subclass so it works
 
+            //CHECK OBJECT COLLISION
+            int objIndex = gp.cChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
+
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false){
                 switch (direction){
@@ -91,6 +98,13 @@ public class Player extends Entity{
             }
         }
     }
+
+    public void pickUpObject(int i){
+        if(i != 999){
+            gp.obj[i] = null;
+        }
+    }
+
     public void draw(Graphics2D g2){
 //        g2.setColor(Color.white);
 //        g2.fillRect(x, y, gp.tileSize, gp.tileSize);
